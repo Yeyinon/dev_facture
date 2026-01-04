@@ -11,13 +11,22 @@ class CreateFacturesTable extends Migration
      *
      * @return void
      */
-    public function up()
-    {
-        Schema::create('factures', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
-    }
+    public function up(): void
+{
+    Schema::create('factures', function (Blueprint $table) {
+        $table->id();
+        $table->foreignId('client_id')->constrained('clients');
+        $table->foreignId('devis_id')->nullable()->constrained('devis');
+        $table->string('num_facture', 10)->unique();
+        $table->date('issue_date');
+        $table->date('due_date')->nullable();
+        $table->decimal('subtotal', 10, 2);
+        $table->decimal('tax', 10, 2)->default(0);
+        $table->decimal('total', 10, 2);
+        $table->enum('status', ['unpaid', 'paid', 'overdue'])->default('unpaid');
+        $table->timestamps();
+    });
+}
 
     /**
      * Reverse the migrations.
