@@ -2,52 +2,65 @@
 
 @section('content')
 
-<h2>✏️ Modifier Devis</h2>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">✏️ Modifier Devis</h2>
+    <a href="{{ route('quotes.index') }}" class="btn btn-outline-secondary">
+        🔙 Retour à la liste
+    </a>
+</div>
 
-<form action="{{ route('quotes.update', $quote) }}" method="POST">
-    @csrf
-    @method('PUT') <!-- Important pour update -->
+<div class="card shadow-sm">
+    <div class="card-body">
 
-    <div>
-        <label>Numéro du devis :</label><br>
-        <input type="text" name="num_devis" value="{{ old('num_devis', $quote->num_devis) }}" required>
+        <form action="{{ route('quotes.update', $quote) }}" method="POST">
+            @csrf
+            @method('PUT')
+
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Numéro du devis</label>
+                    <input type="text" name="num_devis" class="form-control"
+                           value="{{ old('num_devis', $quote->num_devis) }}" required>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Client</label>
+                    <select name="client_id" class="form-select" required>
+                        <option value="">-- Choisir --</option>
+                        @foreach($clients as $client)
+                            <option value="{{ $client->id }}"
+                                {{ old('client_id', $quote->client_id) == $client->id ? 'selected' : '' }}>
+                                {{ $client->nom }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Date</label>
+                    <input type="date" name="issue_date" class="form-control"
+                           value="{{ old('issue_date', $quote->issue_date) }}" required>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Statut</label>
+                <select name="status" class="form-select">
+                    <option value="draft" {{ $quote->status == 'draft' ? 'selected' : '' }}>Brouillon</option>
+                    <option value="sent" {{ $quote->status == 'sent' ? 'selected' : '' }}>Envoyé</option>
+                    <option value="accepted" {{ $quote->status == 'accepted' ? 'selected' : '' }}>Accepté</option>
+                    <option value="rejected" {{ $quote->status == 'rejected' ? 'selected' : '' }}>Rejeté</option>
+                </select>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Mettre à jour</button>
+                <a href="{{ route('home') }}" class="btn btn-outline-secondary">🏠 Dashboard</a>
+            </div>
+
+        </form>
+
     </div>
-
-    <div>
-        <label>Client :</label><br>
-        <select name="client_id" required>
-            <option value="">-- Choisir un client --</option>
-            @foreach($clients as $client)
-                <option value="{{ $client->id }}" {{ old('client_id', $quote->client_id) == $client->id ? 'selected' : '' }}>
-                    {{ $client->nom }}
-                </option>
-            @endforeach
-        </select>
-    </div>
-
-    <div>
-        <label>Date :</label><br>
-        <input type="date" name="issue_date" value="{{ old('issue_date', $quote->issue_date) }}" required>
-    </div>
-
-    <div>
-        <label>Status :</label><br>
-        <select name="status">
-            <option value="draft" {{ $quote->status == 'draft' ? 'selected' : '' }}>Brouillon</option>
-            <option value="sent" {{ $quote->status == 'sent' ? 'selected' : '' }}>Envoyé</option>
-            <option value="accepted" {{ $quote->status == 'accepted' ? 'selected' : '' }}>Accepté</option>
-            <option value="rejected" {{ $quote->status == 'rejected' ? 'selected' : '' }}>Rejeté</option>
-        </select>
-    </div>
-
-    <br>
-    <button type="submit">Mettre à jour le devis</button>
-</form>
-
-<hr>
-<div>
-    <a href="{{ route('quotes.index') }}">🔙 Retour à la liste</a> |
-    <a href="{{ route('home') }}">🏠 Dashboard</a>
 </div>
 
 @endsection
