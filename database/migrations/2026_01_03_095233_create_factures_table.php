@@ -20,9 +20,9 @@ class CreateFacturesTable extends Migration
         $table->string('num_facture', 10)->unique();
         $table->date('issue_date');
         $table->date('due_date')->nullable();
-        $table->decimal('subtotal', 10, 2);
+        $table->decimal('subtotal', 10, 2)->nullable();
         $table->decimal('tax', 10, 2)->default(0);
-        $table->decimal('total', 10, 2);
+        $table->decimal('total', 10, 2)->nullable();
         $table->enum('status', ['unpaid', 'paid', 'overdue'])->default('unpaid');
         $table->timestamps();
     });

@@ -18,8 +18,8 @@ class CreateLigneFactureTable extends Migration
         $table->foreignId('facture_id')->constrained('factures')->onDelete('cascade');
         $table->string('description', 255);
         $table->integer('quantite');
-        $table->decimal('prix_unite', 10, 2);
-        $table->decimal('total', 10, 2);
+        $table->decimal('prix_unite', 10, 2)->nullable();
+        $table->decimal('total', 10, 2)->nullable();
         $table->timestamps();
     });
 }
