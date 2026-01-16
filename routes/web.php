@@ -7,12 +7,19 @@ use App\Http\Controllers\QuoteItemController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\InvoiceItemController;
 
+Route::get('/quotes/{quote}/download-pdf', [QuoteController::class, 'downloadPdf'])
+    ->name('quotes.downloadPdf');
+
 Route::resource('clients', ClientController::class);
 Route::resource('quotes', QuoteController::class);
 Route::resource('invoices', InvoiceController::class);
 
 Route::get('/home', function () {
     return view('home');
+})->name('home');
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
 })->name('home');
 
 

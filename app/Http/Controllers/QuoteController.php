@@ -66,11 +66,14 @@ class QuoteController extends Controller
         $quote->load('client', 'items');
         return view('quotes.show', compact('quote'));
     }
-
+        
     public function downloadPdf(Quote $quote)
-    {
-        $quote->load('client', 'items');
-        $pdf = PDF::loadView('quotes.pdf', compact('quote'));
-        return $pdf->download($quote->num_devis . '.pdf');
-    }
+{
+    $quote->load('client', 'items');
+
+    $pdf = PDF::loadView('quotes.pdf', compact('quote'))
+              ->setPaper('a4');
+
+    return $pdf->download($quote->num_devis . '.pdf');
+}
 }

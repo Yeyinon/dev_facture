@@ -87,9 +87,12 @@ class InvoiceController extends Controller
     }
 
     public function downloadPdf(Invoice $invoice)
-    {
-        $invoice->load('client', 'items', 'quote');
-        $pdf = PDF::loadView('invoices.pdf', compact('invoice'));
-        return $pdf->download($invoice->num_facture . '.pdf');
-    }
+{
+    $invoice->load('client', 'items');
+
+    $pdf = PDF::loadView('invoices.pdf', compact('invoice'))
+              ->setPaper('a4');
+
+    return $pdf->download('facture_' . $invoice->num_facture . '.pdf');
+}
 }

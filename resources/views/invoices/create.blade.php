@@ -2,55 +2,53 @@
 
 @section('content')
 
-<h2>➕ Nouvelle Facture</h2>
+<h2>➕ Nouvelle facture</h2>
 
 <form action="{{ route('invoices.store') }}" method="POST">
     @csrf
 
-    <div>
-        <label>Numéro de facture :</label><br>
-        <input type="text" name="num_facture" value="{{ old('num_facture') }}" required>
-    </div>
-
-    <div>
-        <label>Client :</label><br>
-        <select name="client_id" required>
+    <div class="mb-3">
+        <label class="form-label">Client</label>
+        <select name="client_id" class="form-select" required>
             <option value="">-- Choisir un client --</option>
             @foreach($clients as $client)
-                <option value="{{ $client->id }}" {{ old('client_id') == $client->id ? 'selected' : '' }}>
-                    {{ $client->nom }}
-                </option>
+                <option value="{{ $client->id }}">{{ $client->nom }}</option>
             @endforeach
         </select>
     </div>
 
-    <div>
-        <label>Date de facturation :</label><br>
-        <input type="date" name="issue_date" value="{{ old('issue_date', date('Y-m-d')) }}" required>
+    <div class="mb-3">
+        <label class="form-label">Basée sur un devis (optionnel)</label>
+        <select name="devis_id" class="form-select">
+            <option value="">-- Aucun --</option>
+            @foreach($quotes as $quote)
+                <option value="{{ $quote->id }}">{{ $quote->num_devis }} - {{ $quote->client->nom }}</option>
+            @endforeach
+        </select>
     </div>
 
-    <div>
-        <label>Date d'échéance :</label><br>
-        <input type="date" name="due_date" value="{{ old('due_date') }}">
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label class="form-label">Date</label>
+            <input type="date" name="issue_date" class="form-control" value="{{ date('Y-m-d') }}" required>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Échéance</label>
+            <input type="date" name="due_date" class="form-control" required>
+        </div>
     </div>
 
-    <div>
-        <label>Status :</label><br>
-        <select name="status">
-            <option value="unpaid">Impayée</option>
+    <div class="mb-3">
+        <label class="form-label">Statut</label>
+        <select name="status" class="form-select">
+            <option value="unpaid">Non payée</option>
             <option value="paid">Payée</option>
             <option value="overdue">En retard</option>
         </select>
     </div>
 
-    <br>
-    <button type="submit">Créer la facture</button>
+    <button class="btn btn-success">Créer la facture</button>
+    <a href="{{ route('invoices.index') }}" class="btn btn-secondary">Annuler</a>
 </form>
-
-<hr>
-<div>
-    <a href="{{ route('invoices.index') }}">🔙 Retour à la liste</a> |
-    <a href="{{ route('home') }}">🏠 Dashboard</a>
-</div>
 
 @endsection
