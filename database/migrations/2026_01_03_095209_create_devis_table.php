@@ -19,7 +19,7 @@ class CreateDevisTable extends Migration
         $table->string('num_devis', 25);
         $table->date('issue_date');
         $table->date('valid_until')->nullable();
-        $table->decimal('subtotal', 10, 2);
+        $table->decimal('subtotal', 10, 2)->nullable();
         $table->decimal('tax', 10, 2)->default(0);
         $table->decimal('total', 10, 2);
         $table->enum('status', ['draft', 'sent', 'accepted', 'rejected'])->default('draft');
