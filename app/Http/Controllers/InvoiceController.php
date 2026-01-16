@@ -17,27 +17,44 @@ class InvoiceController extends Controller
         return view('invoices.index', compact('invoices'));
     }
 
-    public function create()
-    {
-        $clients = Client::all();
-        return view('invoices.create', compact('clients'));
-    }
+   public function create()
+{
+    // Récupérer tous les devis existants
+    $quotes = Quote::all();
+
+    // Récupérer tous les clients
+    $clients = Client::all();
+
+    // Envoyer les deux variables à la vue
+    return view('invoices.create', compact('quotes', 'clients'));
+}
+
 
     public function store(Request $request)
 {
     $data = $request->validate([
-        'num_facture' => 'required|max:25',
-        'client_id'   => 'required|exists:clients,id',
-        'issue_date'  => 'required|date',
-        'due_date'    => 'nullable|date',
-        'status'      => 'required|in:unpaid,paid,overdue',
+        'quote_id'   => 'nullable|exists:devis,id',
+        'client_id'  => 'required|exists:clients,id',
+        'issue_date' => 'required|date',
+        'due_date'   => 'nullable|date',
+        'status'     => 'required|in:draft,sent,paid',
     ]);
 
-    $invoice = Invoice::create($data);
+    $invoice = Invoice::create([
+        'quote_id'   => $data['quote_id'] ?? null,
+        'client_id'  => $data['client_id'],
+        'issue_date' => $data['issue_date'],
+        'due_date'   => $data['due_date'] ?? null,
+        'subtotal'   => 0,
+        'tax'        => 0,
+        'total'      => 0,
+        'status'     => $data['status'],
+    ]);
 
     return redirect()->route('invoices.show', $invoice)
-        ->with('success', 'Facture créée avec succès !');
+                     ->with('success', 'Facture créée avec succès !');
 }
+
 
 
     /**
