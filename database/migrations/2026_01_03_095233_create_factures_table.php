@@ -17,7 +17,7 @@ class CreateFacturesTable extends Migration
         $table->id();
         $table->foreignId('client_id')->constrained('clients');
         $table->foreignId('devis_id')->nullable()->constrained('devis');
-        $table->string('num_facture', 10)->unique();
+        $table->string('num_facture', 10)->unique()->nullable();
         $table->date('issue_date');
         $table->date('due_date')->nullable();
         $table->decimal('subtotal', 10, 2)->nullable();
